@@ -1,8 +1,10 @@
 export default {
-    inject: ["current", "forecast", "getForecast", "getForecastCurrentLocation", "getStoredWeatherData", "register", "unsubscribe", "notification"],
+    inject: ["current", "forecast", "getForecast", "getForecastCurrentLocation", "getStoredWeatherData", "register",
+         "unsubscribe", "notification", "cityInputNotification"],
     data() {
         return {
-
+            email: "",
+            search:""
         }
     },
     template:`
@@ -11,6 +13,7 @@ export default {
             <form @submit.prevent= "getStoredWeatherData(search)"  role="search">
                 <label for="cityName" class="form-label fw-bold fs-5">Enter a City name</label>
                 <input type="search" class="form-control" placeholder="E.g.,New York, London, Tokyo" v-model = "search">
+                <p class="notification fs-7 mt-1">{{cityInputNotification}}</p>
                 <button type="submit" class="btn btn-primary mt-3">Search</button>               
             </form>
             </div>          

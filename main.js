@@ -8,6 +8,7 @@ export default {
             forecast: [],
             current: {},
             notification: "",
+            cityInputNotification: "",
         };
     },
     components: {
@@ -19,6 +20,7 @@ export default {
             forecast: computed(() => this.forecast),
             current: computed(() => this.current),
             notification: computed(() => this.notification),
+            cityInputNotification: computed(()=>this.cityInputNotification),
             getForecast: computed(() => this.getForecast),
             getForecastCurrentLocation: computed(() => this.getForecastCurrentLocation),
             getStoredWeatherData: computed(() => this.getStoredWeatherData),
@@ -36,14 +38,22 @@ export default {
             try {
                 var url = "";
                 if (cityname === null) {
-                    url = `http://nhathuy188-001-site1.gtempurl.com/api/Weathers?`;
+                    url = `https://nhathuy188-001-site1.gtempurl.com/api/Weathers?`;
                 } else {
-                    url = `http://nhathuy188-001-site1.gtempurl.com/api/Weathers?location=${cityname}`;
+                    url = `https://nhathuy188-001-site1.gtempurl.com/api/Weathers?location=${cityname}`;
                 }
+                console.log(url);
                 const res = await fetch(url);
                 const data = await res.json();
-                this.current = data[0];
-                this.forecast = data;
+                console.log(data);
+                if(res.status === 500){
+                    this.cityInputNotification = data.errorMessage;
+                }
+                else{                    
+                    this.cityInputNotification = "";
+                    this.current = data[0];
+                    this.forecast = data;
+                }
                 // Lưu vào localStorage
                 localStorage.setItem(
                     `weatherData_${this.current.city}_${this.current.date}`,
@@ -68,7 +78,7 @@ export default {
             const storedWeather = localStorage.getItem(`weatherData_${cityname}_${currentDate}`);
             if(storedWeather){
                 this.forecast = JSON.parse(storedWeather);
-                this.currentDate = this.forecast[0];
+                this.current = this.forecast[0];
             }
             else{
                 this.getForecast(cityname);
@@ -79,14 +89,18 @@ export default {
                 var data ={
                     Email: email
                 };
-                const fetchData = await fetch('http://nhathuy188-001-site1.gtempurl.com/api/Weathers/register',{
+                const res = await fetch('https://nhathuy188-001-site1.gtempurl.com/api/Weathers/register',{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(data)
                 })
-                this.notification = await fetchData.text();
+                if(res.status === 500){
+                    const fetchData = await res.json();
+                    this.notification = fetchData.errorMessage;
+                }
+                this.notification = await res.text();
             } catch (error) {
                 console.log(error);
             }
@@ -96,7 +110,7 @@ export default {
                 var data ={
                     Email: email
                 };
-                const fetchData = await fetch('http://nhathuy188-001-site1.gtempurl.com/api/Weathers/unsubscribe',{
+                const fetchData = await fetch('https://nhathuy188-001-site1.gtempurl.com/api/Weathers/unsubscribe',{
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
