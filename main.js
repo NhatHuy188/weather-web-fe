@@ -36,9 +36,9 @@ export default {
             try {
                 var url = "";
                 if (cityname === null) {
-                    url = `https://localhost:7103/api/Weathers?`;
+                    url = `http://nhathuy188-001-site1.gtempurl.com/api/Weathers?`;
                 } else {
-                    url = `https://localhost:7103/api/Weathers?location=${cityname}`;
+                    url = `http://nhathuy188-001-site1.gtempurl.com/api/Weathers?location=${cityname}`;
                 }
                 const res = await fetch(url);
                 const data = await res.json();
@@ -79,7 +79,7 @@ export default {
                 var data ={
                     Email: email
                 };
-                const fetchData = await fetch('https://localhost:7103/api/Weathers/register',{
+                const fetchData = await fetch('http://nhathuy188-001-site1.gtempurl.com/api/Weathers/register',{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export default {
                 var data ={
                     Email: email
                 };
-                const fetchData = await fetch('https://localhost:7103/api/Weathers/unsubscribe',{
+                const fetchData = await fetch('http://nhathuy188-001-site1.gtempurl.com/api/Weathers/unsubscribe',{
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
